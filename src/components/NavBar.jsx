@@ -12,6 +12,10 @@ class NavBar extends Component {
     return (
       <Menu inverted >
         <Menu.Item name='home' onClick={this.handleItemClick} icon='home' />
+        <img src="https://cdn1.iconfinder.com/data/icons/simple-icons/256/twitch-256-black.png" alt="twitch logo" height="50px"/>
+        <span className="navbar-clips-header">Twitch Clips</span>
+        <Menu.Item />
+        <Menu.Item name='Browse' onClick={this.handleItemClick} />
         <Menu.Menu position='right'>
           <Menu.Item>
             <Input icon='search' placeholder='Search...' />

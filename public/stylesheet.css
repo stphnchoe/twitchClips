@@ -2,3 +2,24 @@
   background: #6441a4 !important;
   border-radius: 0px;
 }
+
+.navbar-clips-header {
+  display: flex;
+  color: white;
+  font-family: 'Bangers';
+  font-size: 3em;
+  align-items: center;
+}
+
+.float-right {
+  float: right;
+}
+
+.card-description-username {
+  display: flex;
+  align-items: stretch;
+}
+
+.bbblue {
+  color: blue !important;
+}

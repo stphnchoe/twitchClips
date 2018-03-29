@@ -1,14 +1,44 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { Card, Icon, Image } from 'semantic-ui-react';
+import moment from 'moment';
 
-const VideoListItem = () => (
-  <div>
-    <h1>Title</h1>
-    <h2>Picture</h2>
-    <h3>Broadcaster</h3>
-    <h3>Views</h3>
-    <h5>Follow</h5>
-    <h3>Category</h3>
-  </div>
-);
+
+const VideoListItem = ({ video }) => {
+  const extra = (
+    <div>
+      <Icon name='eye' color='purple'/>
+      {video.views}
+    </div>
+  );
+  return (
+    <Card fluid extra={extra}>
+      <Image src={video.thumbnails.small} />
+      <Card.Content>
+        <Card.Header>
+          {video.title}
+        </Card.Header>
+        <Card.Meta>
+          <Icon name="game" color="red" />
+          <a>{video.game}</a>
+          <span className="float-right">
+            <Icon name="time" />
+            {moment(video.created_at).fromNow()}
+          </span>
+        </Card.Meta>
+      </Card.Content>
+      <Card.Content>
+        <div className="float-right">
+          <Icon name="eye" color="purple" />
+          {video.views}
+        </div>
+        <Icon name="user" color="blue" />
+        <a href={video.broadcaster.channel_url}>
+          {video.broadcaster.name}
+        </a>
+      </Card.Content>
+    </Card>
+  );
+};
 
 export default VideoListItem;
