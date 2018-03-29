@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import NavBar from './components/NavBar';
 import VideoList from './components/VideoList';
 
 class App extends Component {
@@ -10,6 +11,7 @@ class App extends Component {
   render() {
     return (
       <div>
+        <NavBar />
         <h1>Twitch Clips App</h1>
         <VideoList />
       </div>

@@ -7,7 +7,9 @@
     "netlify-lambda": "^0.3.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-scripts": "1.1.1"
+    "react-scripts": "1.1.1",
+    "semantic-ui-css": "^2.3.1",
+    "semantic-ui-react": "^0.79.0"
   },
   "scripts": {
     "start": "react-scripts start",
