@@ -12,7 +12,7 @@ const VideoListItem = (props) => {
   };
 
   return (
-    <Card fluid onClick={clickHandler}>
+    <Card fluid onClick={clickHandler} color="purple">
       <Image src={props.video.thumbnails.small} />
       <Card.Content>
         <Card.Header>

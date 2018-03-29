@@ -38,7 +38,7 @@ class App extends Component {
           </div>    
         )}/>
         <Route path="/clip" render={props => (
-          <div>
+          <div className="app-route-clip-div">
             <ClipsView {...props} video={this.state.video} />
           </div>
         )}/>
