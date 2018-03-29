@@ -11,20 +11,22 @@ class NavBar extends Component {
     const { activeItem } = this.state
 
     return (
-      <Menu inverted >
-        <Menu.Item name='home' as={Link} to='/' icon='home' />
-        <img src="https://cdn1.iconfinder.com/data/icons/simple-icons/256/twitch-256-black.png" alt="twitch logo" height="50px"/>
-        <span className="navbar-clips-header">Twitch Clips</span>
-        <Menu.Item />
-        <Menu.Item name='Browse' onClick={this.handleItemClick} as={Link} to='/browse' />
-        <Menu.Menu position='right'>
-          <Menu.Item>
-            <Input icon='search' placeholder='Search...' />
-          </Menu.Item>
-          <Menu.Item name='Login' onClick={this.handleItemClick} />
-          <Menu.Item name='Sign Up' onClick={this.handleItemClick} />
-        </Menu.Menu>
-      </Menu>
+      <div>
+        <Menu inverted>
+          <Menu.Item name='home' as={Link} to='/' icon='home' />
+          <img src="https://cdn1.iconfinder.com/data/icons/simple-icons/256/twitch-256-black.png" alt="twitch logo" height="50px"/>
+          <span className="navbar-clips-header">Twitch Clips</span>
+          <Menu.Item />
+          <Menu.Item name='Browse' onClick={this.handleItemClick} as={Link} to='/browse' />
+          <Menu.Menu position='right'>
+            <Menu.Item>
+              <Input icon='search' placeholder='Search...' />
+            </Menu.Item>
+            <Menu.Item name='Login' onClick={this.handleItemClick} />
+            <Menu.Item name='Sign Up' onClick={this.handleItemClick} />
+          </Menu.Menu>
+        </Menu>
+      </div>
     )
   }
 }

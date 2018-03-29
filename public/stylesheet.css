@@ -20,6 +20,19 @@
   align-items: stretch;
 }
 
-.bbblue {
-  color: blue !important;
+.app-clips-title {
+  display: flex;
+  color: #6441a4;
+  height: 1.8em;
+  font-family: 'Bangers';
+  font-size: 2.7em;
+  align-items: center;
+}
+
+.clipview-broadcaster {
+  font-size: 1.6em;
+}
+
+iframe {
+  display: block;
 }

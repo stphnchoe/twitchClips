@@ -4,41 +4,42 @@ import { Card, Icon, Image } from 'semantic-ui-react';
 import moment from 'moment';
 
 
-const VideoListItem = ({ video }) => {
-  const extra = (
-    <div>
-      <Icon name='eye' color='purple'/>
-      {video.views}
-    </div>
-  );
+const VideoListItem = (props) => {
+
+  const clickHandler = () => {
+    props.onItemClick(props.video);
+    props.history.push(`/clip/${props.video.slug}`)
+  };
+
   return (
-    <Card fluid extra={extra}>
-      <Image src={video.thumbnails.small} />
+    <Card fluid onClick={clickHandler}>
+      <Image src={props.video.thumbnails.small} />
       <Card.Content>
         <Card.Header>
-          {video.title}
+          {props.video.title}
         </Card.Header>
         <Card.Meta>
-          <Icon name="game" color="red" />
-          <a>{video.game}</a>
+          <Icon name="game" color="purple" />
+          <a>{props.video.game}</a>
           <span className="float-right">
             <Icon name="time" />
-            {moment(video.created_at).fromNow()}
+            {moment(props.video.created_at).fromNow()}
           </span>
         </Card.Meta>
       </Card.Content>
       <Card.Content>
         <div className="float-right">
-          <Icon name="eye" color="purple" />
-          {video.views}
+          <Icon name="eye" color="blue" />
+          {props.video.views}
         </div>
-        <Icon name="user" color="blue" />
-        <a href={video.broadcaster.channel_url}>
-          {video.broadcaster.name}
+        <Icon name="twitch" color="black"/>
+        <a href={props.video.broadcaster.channel_url}>
+          {props.video.broadcaster.name}
         </a>
       </Card.Content>
     </Card>
   );
 };
+
 
 export default VideoListItem;
