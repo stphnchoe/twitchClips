@@ -2,6 +2,7 @@
   border-radius: 5px;
   color: white;
   font-size: 2.46em;
+  font-family: 'Oswald';
   text-align: center;
 }
 #navbar-menu {
@@ -87,5 +88,10 @@
 }
 
 .change-font {
+  font-family: 'Oswald';
+}
+
+#homeview-title {
+  color: white;
   font-family: 'Oswald';
 }
