@@ -3,7 +3,8 @@ import { Route } from 'react-router-dom';
 import NavBar from './components/NavBar';
 import VideoList from './components/VideoList';
 import TimePeriodsBar from './components/TimePeriodsBar';
-import ClipsView from './components/ClipsView.jsx';
+import ClipsView from './components/ClipsView';
+import HomeView from './components/HomeView';
 import { clips } from './exampleData/exampleData';
 
 class App extends Component {
@@ -24,22 +25,22 @@ class App extends Component {
 
   render() {
     return (
-      <div>
+      <div id="primary-background-image">
         <NavBar />
         <Route path="/browse" render={props => (
-          <div>
+          <div id="secondary-background-image">
             <TimePeriodsBar />
-            <div>
-              <span className='app-clips-title'>
-                Popular Twitch Clips
-              </span>
-            </div>
             <VideoList {...props} videos={this.state.videos} onItemClick={this.onVideoItemClick}/>
-          </div>    
+          </div>
         )}/>
         <Route path="/clip" render={props => (
+          <div className="app-route-clip-div" id="tertiary-background-image">
+            <ClipsView video={this.state.video} />
+          </div>
+        )}/>
+        <Route exact path="/" render={props => (
           <div className="app-route-clip-div">
-            <ClipsView {...props} video={this.state.video} />
+            <HomeView video={this.state.video} />
           </div>
         )}/>
       </div>

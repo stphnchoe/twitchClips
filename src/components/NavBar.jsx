@@ -12,7 +12,7 @@ class NavBar extends Component {
 
     return (
       <div>
-        <Menu inverted>
+        <Menu inverted id="navbar-menu">
           <Menu.Item name='home' as={Link} to='/' icon='home' />
           <img src="https://cdn1.iconfinder.com/data/icons/simple-icons/256/twitch-256-black.png" alt="twitch logo" height="50px"/>
           <span className="navbar-clips-header">Twitch Clips</span>

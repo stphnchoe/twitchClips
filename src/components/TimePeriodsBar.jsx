@@ -15,10 +15,10 @@ class TimePeriodsBar extends Component {
       <div>
         <Menu pointing secondary color='purple'>
           <Menu.Menu position='right'>
-            <Menu.Item name='Day' active={activeItem === 'Day'} onClick={this.handleItemClick} />
-            <Menu.Item name='Week' active={activeItem === 'Week'} onClick={this.handleItemClick} />
-            <Menu.Item name='Month' active={activeItem === 'Month'} onClick={this.handleItemClick} />
-            <Menu.Item name='All time' active={activeItem === 'All time'} onClick={this.handleItemClick} />
+            <Menu.Item id="white-font" name='Day' active={activeItem === 'Day'} onClick={this.handleItemClick} />
+            <Menu.Item id="white-font" name='Week' active={activeItem === 'Week'} onClick={this.handleItemClick} />
+            <Menu.Item id="white-font" name='Month' active={activeItem === 'Month'} onClick={this.handleItemClick} />
+            <Menu.Item id="white-font" name='All time' active={activeItem === 'All time'} onClick={this.handleItemClick} />
           </Menu.Menu>
         </Menu>
       </div>
