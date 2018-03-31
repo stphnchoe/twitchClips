@@ -40,7 +40,7 @@ class App extends Component {
         )}/>
         <Route exact path="/" render={props => (
           <div className="app-route-clip-div">
-            <HomeView video={this.state.video} />
+            <HomeView {...props} video={this.state.video} onItemClick={this.onVideoItemClick} />
           </div>
         )}/>
       </div>
