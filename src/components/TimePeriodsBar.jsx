@@ -2,11 +2,20 @@ import React, { Component } from 'react'
 import { Menu } from 'semantic-ui-react'
 
 class TimePeriodsBar extends Component {
-  state = { activeItem: 'Week' }
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeItem: 'Week',
+    }
+    this.handleItemClick = this.handleItemClick.bind(this);
+  }
 
-  //TODO: ADD API CALL TO TWITCH ON CLICK
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
-
+  handleItemClick(e, { name }) {
+    if ( name !== this.state.activeItem) {
+      this.props.onDurationClick(name);
+      this.setState({ activeItem: name })
+    }
+  }
 
   render() {
     const { activeItem } = this.state
@@ -18,7 +27,7 @@ class TimePeriodsBar extends Component {
             <Menu.Item id="white-font" name='Day' active={activeItem === 'Day'} onClick={this.handleItemClick} />
             <Menu.Item id="white-font" name='Week' active={activeItem === 'Week'} onClick={this.handleItemClick} />
             <Menu.Item id="white-font" name='Month' active={activeItem === 'Month'} onClick={this.handleItemClick} />
-            <Menu.Item id="white-font" name='All time' active={activeItem === 'All time'} onClick={this.handleItemClick} />
+            <Menu.Item id="white-font" name='All Time' active={activeItem === 'All Time'} onClick={this.handleItemClick} />
           </Menu.Menu>
         </Menu>
       </div>

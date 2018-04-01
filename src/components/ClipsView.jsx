@@ -12,7 +12,7 @@ const ClipsView = ({ video }) => (
       </Grid.Row>
     </Grid.Column>
     <Grid.Row centered divided className="clipview-details-row">
-      <Grid.Column centered  width={2}>
+      <Grid.Column centered width={3}>
         <span id="text-align-center">
           <Icon name="twitch" size="large" color="purple" />
           <a href={video.broadcaster.channel_url}>

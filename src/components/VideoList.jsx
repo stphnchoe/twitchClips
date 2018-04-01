@@ -8,7 +8,7 @@ const VideoList = props => (
       Popular Twitch Clips
     </span>
     <Grid centered columns={6}>
-      {props.videos.map((video) => {
+      {props.browseVideos.map((video) => {
         return (
           <Grid.Column stretched computer={3} tablet={5} mobile={16} key={video.slug}>
             <VideoListItem {...props} video={video} onItemClick={props.onItemClick} />

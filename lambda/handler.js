@@ -70,65 +70,70 @@
 "use strict";
 
 
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
 const axios = __webpack_require__(15);
 const twitchConfig = __webpack_require__(44)['Client-ID'];
 
-function fetchTopClips(cb) {
-  axios.get('https://api.twitch.tv/kraken/clips/top', {
-    headers: {
-      'Client-ID': twitchConfig,
-      Accept: 'application/vnd.twitchtv.v5+json'
-    }
-  }).then(response => {
-    console.log('success ', response.data);
-    cb(null, JSON.stringify(response.data));
-  }).catch(error => {
-    console.log(error);
-    cb(error, null);
-  });
-}
-
-exports.handler = (event, ctx, cb) => {
-  if (event.httpMethod !== 'GET') {
-    cb('ERROR! METHOD NOT ACCEPTED', null);
-  } else {
-    fetchTopClips((err, data) => {
-      if (err) {
-        cb(err, null);
-      } else {
-        cb(null, {
-          statusCode: 200,
-          body: data
+exports.handler = (() => {
+  var _ref = _asyncToGenerator(function* (event, ctx, cb) {
+    if (event.httpMethod !== 'GET') {
+      cb('ERROR! METHOD NOT ACCEPTED', null);
+    } else {
+      try {
+        const data0 = yield axios.get('https://api.twitch.tv/kraken/clips/top', {
+          headers: {
+            'Client-ID': twitchConfig,
+            Accept: 'application/vnd.twitchtv.v5+json'
+          },
+          params: {
+            limit: 100,
+            period: 'day'
+          }
         });
+        const data1 = yield axios.get('https://api.twitch.tv/kraken/clips/top', {
+          headers: {
+            'Client-ID': twitchConfig,
+            Accept: 'application/vnd.twitchtv.v5+json'
+          },
+          params: {
+            limit: 100,
+            period: 'week'
+          }
+        });
+        const data2 = yield axios.get('https://api.twitch.tv/kraken/clips/top', {
+          headers: {
+            'Client-ID': twitchConfig,
+            Accept: 'application/vnd.twitchtv.v5+json'
+          },
+          params: {
+            limit: 100,
+            period: 'month'
+          }
+        });
+        const data3 = yield axios.get('https://api.twitch.tv/kraken/clips/top', {
+          headers: {
+            'Client-ID': twitchConfig,
+            Accept: 'application/vnd.twitchtv.v5+json'
+          },
+          params: {
+            limit: 100,
+            period: 'all'
+          }
+        });
+
+        const data = data0.data.clips.concat(data1.data.clips.concat(data2.data.clips.concat(data3.data.clips)));
+        cb(null, { statusCode: 200, body: JSON.stringify(data) });
+      } catch (error) {
+        console.error(error);
       }
-    });
-  }
-};
+    }
+  });
 
-// {
-//     "path": "Path parameter",
-//     "httpMethod": "Incoming request's method name"
-//     "headers": {Incoming request headers}
-//     "queryStringParameters": {query string parameters }
-//     "body": "A JSON string of the request payload."
-//     "isBase64Encoded": "A boolean flag to indicate if the applicable request payload is Base64-encode"
-// }
-// cb(err, res)
-// response object
-// {
-//     "isBase64Encoded": true|false,
-//     "statusCode": httpStatusCode,
-//     "headers": { "headerName": "headerValue", ... },
-//     "body": "..."
-// }
-// Here’s a simple example function hello.js:
-
-// exports.handler = function(event, context, callback) {
-//     callback(null, {
-//     statusCode: 200,
-//     body: "Hello, World"
-//     });
-// }
+  return function (_x, _x2, _x3) {
+    return _ref.apply(this, arguments);
+  };
+})();
 
 /***/ }),
 /* 1 */

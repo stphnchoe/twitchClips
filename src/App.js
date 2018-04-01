@@ -6,32 +6,51 @@ import VideoList from './components/VideoList';
 import TimePeriodsBar from './components/TimePeriodsBar';
 import ClipsView from './components/ClipsView';
 import HomeView from './components/HomeView';
-import { clips } from './exampleData/exampleData';
+import { clips } from './exampleData';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      videos: [],
-      video: {},
+      browseVideos: clips,
+      video: clips[0],
     };
+    this.cache = [];
+    this.onDurationClick = this.onDurationClick.bind(this);
     this.onVideoItemClick = this.onVideoItemClick.bind(this);
   }
 
   componentDidMount() {
     axios.get('/.netlify/functions/handler')
       .then(response => {
+        this.cache = response.data;
         this.setState({
-          videos: response.data.clips,
-          video: response.data.clips[0],
+          browseVideos: response.data.slice(0,100),
+          video: response.data[0],
         })
       })
-      .catch(error => (console.log('ERROR! ', error)));
+      .catch(error => console.log('ERROR! ', error));
   }
 
   onVideoItemClick(video) {
     this.setState({
       video,
+    });
+  }
+
+  onDurationClick(duration) {
+    let durationVideos = [];
+    if (duration === 'Day') {
+      durationVideos = this.cache.slice(0,100);
+    } else if (duration === 'Week') {
+      durationVideos = this.cache.slice(100,200);
+    } else if (duration === 'Month') {
+      durationVideos = this.cache.slice(200,300);
+    } else if (duration === 'All Time') {
+      durationVideos = this.cache.slice(300,400);
+    }
+    this.setState({
+      browseVideos: durationVideos, 
     });
   }
 
@@ -41,8 +60,8 @@ class App extends Component {
         <NavBar />
         <Route path="/browse" render={props => (
           <div id="secondary-background-image">
-            <TimePeriodsBar />
-            <VideoList {...props} videos={this.state.videos} onItemClick={this.onVideoItemClick}/>
+            <TimePeriodsBar onDurationClick={this.onDurationClick} />
+            <VideoList {...props} browseVideos={this.state.browseVideos} onItemClick={this.onVideoItemClick}/>
           </div>
         )}/>
         <Route path="/clip" render={props => (
