@@ -24,6 +24,17 @@ function isProhibitedIdentifier(name) {
 }
 
 /**
+ * Reports the given node and identifier name.
+ * @param {RuleContext} context The ESLint rule context.
+ * @param {ASTNode} node The node to report on.
+ * @param {string} identifierName The name of the identifier.
+ * @returns {void}
+ */
+function report(context, node, identifierName) {
+    context.report(node, "Unexpected {{name}}.", { name: identifierName });
+}
+
+/**
  * Finds the eslint-scope reference in the given scope.
  * @param {Object} scope The scope to search.
  * @param {ASTNode} node The identifier node.
@@ -77,15 +88,10 @@ module.exports = {
         docs: {
             description: "disallow the use of `alert`, `confirm`, and `prompt`",
             category: "Best Practices",
-            recommended: false,
-            url: "https://eslint.org/docs/rules/no-alert"
+            recommended: false
         },
 
-        schema: [],
-
-        messages: {
-            unexpected: "Unexpected {{name}}."
-        }
+        schema: []
     },
 
     create(context) {
@@ -96,25 +102,17 @@ module.exports = {
 
                 // without window.
                 if (callee.type === "Identifier") {
-                    const name = callee.name;
+                    const identifierName = callee.name;
 
                     if (!isShadowed(currentScope, callee) && isProhibitedIdentifier(callee.name)) {
-                        context.report({
-                            node,
-                            messageId: "unexpected",
-                            data: { name }
-                        });
+                        report(context, node, identifierName);
                     }
 
                 } else if (callee.type === "MemberExpression" && isGlobalThisReferenceOrGlobalWindow(currentScope, callee.object)) {
-                    const name = getPropertyName(callee);
+                    const identifierName = getPropertyName(callee);
 
-                    if (isProhibitedIdentifier(name)) {
-                        context.report({
-                            node,
-                            messageId: "unexpected",
-                            data: { name }
-                        });
+                    if (isProhibitedIdentifier(identifierName)) {
+                        report(context, node, identifierName);
                     }
                 }
 

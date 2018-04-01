@@ -84,10 +84,11 @@ function isES5Constructor(node) {
  * @returns {Node|null} A found function node.
  */
 function getUpperFunction(node) {
-    for (let currentNode = node; currentNode; currentNode = currentNode.parent) {
-        if (anyFunctionPattern.test(currentNode.type)) {
-            return currentNode;
+    while (node) {
+        if (anyFunctionPattern.test(node.type)) {
+            return node;
         }
+        node = node.parent;
     }
     return null;
 }
@@ -131,10 +132,12 @@ function isLoop(node) {
  * @returns {boolean} `true` if the node is in a loop.
  */
 function isInLoop(node) {
-    for (let currentNode = node; currentNode && !isFunction(currentNode); currentNode = currentNode.parent) {
-        if (isLoop(currentNode)) {
+    while (node && !isFunction(node)) {
+        if (isLoop(node)) {
             return true;
         }
+
+        node = node.parent;
     }
 
     return false;
@@ -201,14 +204,16 @@ function isArrayFromMethod(node) {
  * @returns {boolean} Whether or not the node is a method which has `thisArg`.
  */
 function isMethodWhichHasThisArg(node) {
-    for (
-        let currentNode = node;
-        currentNode.type === "MemberExpression" && !currentNode.computed;
-        currentNode = currentNode.property
-    ) {
-        if (currentNode.property.type === "Identifier") {
-            return arrayMethodPattern.test(currentNode.property.name);
+    while (node) {
+        if (node.type === "Identifier") {
+            return arrayMethodPattern.test(node.name);
         }
+        if (node.type === "MemberExpression" && !node.computed) {
+            node = node.property;
+            continue;
+        }
+
+        break;
     }
 
     return false;
@@ -401,31 +406,6 @@ function createGlobalLinebreakMatcher() {
     return new RegExp(LINEBREAK_MATCHER.source, "g");
 }
 
-/**
- * Checks whether or not the tokens of two given nodes are same.
- * @param {ASTNode} left - A node 1 to compare.
- * @param {ASTNode} right - A node 2 to compare.
- * @param {SourceCode} sourceCode - The ESLint source code object.
- * @returns {boolean} the source code for the given node.
- */
-function equalTokens(left, right, sourceCode) {
-    const tokensL = sourceCode.getTokens(left);
-    const tokensR = sourceCode.getTokens(right);
-
-    if (tokensL.length !== tokensR.length) {
-        return false;
-    }
-    for (let i = 0; i < tokensL.length; ++i) {
-        if (tokensL[i].type !== tokensR[i].type ||
-            tokensL[i].value !== tokensR[i].value
-        ) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
 //------------------------------------------------------------------------------
 // Public Interface
 //------------------------------------------------------------------------------
@@ -458,7 +438,6 @@ module.exports = {
     isArrayFromMethod,
     isParenthesised,
     createGlobalLinebreakMatcher,
-    equalTokens,
 
     isArrowToken,
     isClosingBraceToken,
@@ -626,10 +605,9 @@ module.exports = {
             return false;
         }
         const isAnonymous = node.id === null;
-        let currentNode = node;
 
-        while (currentNode) {
-            const parent = currentNode.parent;
+        while (node) {
+            const parent = node.parent;
 
             switch (parent.type) {
 
@@ -639,57 +617,51 @@ module.exports = {
                  */
                 case "LogicalExpression":
                 case "ConditionalExpression":
-                    currentNode = parent;
+                    node = parent;
                     break;
 
-                /*
-                 * If the upper function is IIFE, checks the destination of the return value.
-                 * e.g.
-                 *   obj.foo = (function() {
-                 *     // setup...
-                 *     return function foo() { ... };
-                 *   })();
-                 *   obj.foo = (() =>
-                 *     function foo() { ... }
-                 *   )();
-                 */
+                // If the upper function is IIFE, checks the destination of the return value.
+                // e.g.
+                //   obj.foo = (function() {
+                //     // setup...
+                //     return function foo() { ... };
+                //   })();
+                //   obj.foo = (() =>
+                //     function foo() { ... }
+                //   )();
                 case "ReturnStatement": {
                     const func = getUpperFunction(parent);
 
                     if (func === null || !isCallee(func)) {
                         return true;
                     }
-                    currentNode = func.parent;
+                    node = func.parent;
                     break;
                 }
                 case "ArrowFunctionExpression":
-                    if (currentNode !== parent.body || !isCallee(parent)) {
+                    if (node !== parent.body || !isCallee(parent)) {
                         return true;
                     }
-                    currentNode = parent.parent;
+                    node = parent.parent;
                     break;
 
-                /*
-                 * e.g.
-                 *   var obj = { foo() { ... } };
-                 *   var obj = { foo: function() { ... } };
-                 *   class A { constructor() { ... } }
-                 *   class A { foo() { ... } }
-                 *   class A { get foo() { ... } }
-                 *   class A { set foo() { ... } }
-                 *   class A { static foo() { ... } }
-                 */
+                // e.g.
+                //   var obj = { foo() { ... } };
+                //   var obj = { foo: function() { ... } };
+                //   class A { constructor() { ... } }
+                //   class A { foo() { ... } }
+                //   class A { get foo() { ... } }
+                //   class A { set foo() { ... } }
+                //   class A { static foo() { ... } }
                 case "Property":
                 case "MethodDefinition":
-                    return parent.value !== currentNode;
+                    return parent.value !== node;
 
-                /*
-                 * e.g.
-                 *   obj.foo = function foo() { ... };
-                 *   Foo = function() { ... };
-                 *   [obj.foo = function foo() { ... }] = a;
-                 *   [Foo = function() { ... }] = a;
-                 */
+                // e.g.
+                //   obj.foo = function foo() { ... };
+                //   Foo = function() { ... };
+                //   [obj.foo = function foo() { ... }] = a;
+                //   [Foo = function() { ... }] = a;
                 case "AssignmentExpression":
                 case "AssignmentPattern":
                     if (parent.left.type === "MemberExpression") {
@@ -704,27 +676,23 @@ module.exports = {
                     }
                     return true;
 
-                /*
-                 * e.g.
-                 *   var Foo = function() { ... };
-                 */
+                // e.g.
+                //   var Foo = function() { ... };
                 case "VariableDeclarator":
                     return !(
                         isAnonymous &&
-                        parent.init === currentNode &&
+                        parent.init === node &&
                         parent.id.type === "Identifier" &&
                         startsWithUpperCase(parent.id.name)
                     );
 
-                /*
-                 * e.g.
-                 *   var foo = function foo() { ... }.bind(obj);
-                 *   (function foo() { ... }).call(obj);
-                 *   (function foo() { ... }).apply(obj, []);
-                 */
+                // e.g.
+                //   var foo = function foo() { ... }.bind(obj);
+                //   (function foo() { ... }).call(obj);
+                //   (function foo() { ... }).apply(obj, []);
                 case "MemberExpression":
                     return (
-                        parent.object !== currentNode ||
+                        parent.object !== node ||
                         parent.property.type !== "Identifier" ||
                         !bindOrCallOrApplyPattern.test(parent.property.name) ||
                         !isCallee(parent) ||
@@ -732,31 +700,29 @@ module.exports = {
                         isNullOrUndefined(parent.parent.arguments[0])
                     );
 
-                /*
-                 * e.g.
-                 *   Reflect.apply(function() {}, obj, []);
-                 *   Array.from([], function() {}, obj);
-                 *   list.forEach(function() {}, obj);
-                 */
+                // e.g.
+                //   Reflect.apply(function() {}, obj, []);
+                //   Array.from([], function() {}, obj);
+                //   list.forEach(function() {}, obj);
                 case "CallExpression":
                     if (isReflectApply(parent.callee)) {
                         return (
                             parent.arguments.length !== 3 ||
-                            parent.arguments[0] !== currentNode ||
+                            parent.arguments[0] !== node ||
                             isNullOrUndefined(parent.arguments[1])
                         );
                     }
                     if (isArrayFromMethod(parent.callee)) {
                         return (
                             parent.arguments.length !== 3 ||
-                            parent.arguments[1] !== currentNode ||
+                            parent.arguments[1] !== node ||
                             isNullOrUndefined(parent.arguments[2])
                         );
                     }
                     if (isMethodWhichHasThisArg(parent.callee)) {
                         return (
                             parent.arguments.length !== 2 ||
-                            parent.arguments[0] !== currentNode ||
+                            parent.arguments[0] !== node ||
                             isNullOrUndefined(parent.arguments[1])
                         );
                     }
@@ -964,10 +930,8 @@ module.exports = {
             node.type === "FunctionDeclaration" ||
             node.type === "FunctionExpression" ||
 
-            /*
-             * Do not check arrow functions with implicit return.
-             * `() => "use strict";` returns the string `"use strict"`.
-             */
+            // Do not check arrow functions with implicit return.
+            // `() => "use strict";` returns the string `"use strict"`.
             (node.type === "ArrowFunctionExpression" && node.body.type === "BlockStatement")
         ) {
             const statements = node.type === "Program" ? node.body : node.body.body;
@@ -990,7 +954,7 @@ module.exports = {
 
     /**
      * Determines whether this node is a decimal integer literal. If a node is a decimal integer literal, a dot added
-     * after the node will be parsed as a decimal point, rather than a property-access dot.
+     after the node will be parsed as a decimal point, rather than a property-access dot.
      * @param {ASTNode} node - The node to check.
      * @returns {boolean} `true` if this node is a decimal integer.
      * @example
@@ -1219,12 +1183,12 @@ module.exports = {
     },
 
     /**
-     * Gets the parenthesized text of a node. This is similar to sourceCode.getText(node), but it also includes any parentheses
-     * surrounding the node.
-     * @param {SourceCode} sourceCode The source code object
-     * @param {ASTNode} node An expression node
-     * @returns {string} The text representing the node, with all surrounding parentheses included
-     */
+    * Gets the parenthesized text of a node. This is similar to sourceCode.getText(node), but it also includes any parentheses
+    * surrounding the node.
+    * @param {SourceCode} sourceCode The source code object
+    * @param {ASTNode} node An expression node
+    * @returns {string} The text representing the node, with all surrounding parentheses included
+    */
     getParenthesisedText(sourceCode, node) {
         let leftToken = sourceCode.getFirstToken(node);
         let rightToken = sourceCode.getLastToken(node);

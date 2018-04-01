@@ -21,8 +21,7 @@ module.exports = {
         docs: {
             description: "disallow `else` blocks after `return` statements in `if` statements",
             category: "Best Practices",
-            recommended: false,
-            url: "https://eslint.org/docs/rules/no-else-return"
+            recommended: false
         },
 
         schema: [{
@@ -34,12 +33,7 @@ module.exports = {
             },
             additionalProperties: false
         }],
-
-        fixable: "code",
-
-        messages: {
-            unexpected: "Unnecessary 'else' after 'return'."
-        }
+        fixable: "code"
     },
 
     create(context) {
@@ -57,7 +51,7 @@ module.exports = {
         function displayReport(node) {
             context.report({
                 node,
-                messageId: "unexpected",
+                message: "Unnecessary 'else' after 'return'.",
                 fix: fixer => {
                     const sourceCode = context.getSourceCode();
                     const startToken = sourceCode.getFirstToken(node);
@@ -72,12 +66,10 @@ module.exports = {
                         firstTokenOfElseBlock = startToken;
                     }
 
-                    /*
-                     * If the if block does not have curly braces and does not end in a semicolon
-                     * and the else block starts with (, [, /, +, ` or -, then it is not
-                     * safe to remove the else keyword, because ASI will not add a semicolon
-                     * after the if block
-                     */
+                    // If the if block does not have curly braces and does not end in a semicolon
+                    // and the else block starts with (, [, /, +, ` or -, then it is not
+                    // safe to remove the else keyword, because ASI will not add a semicolon
+                    // after the if block
                     const ifBlockMaybeUnsafe = node.parent.consequent.type !== "BlockStatement" && lastIfToken.value !== ";";
                     const elseBlockUnsafe = /^[([/+`-]/.test(firstTokenOfElseBlock.value);
 
@@ -94,12 +86,10 @@ module.exports = {
                         const nextTokenUnsafe = nextToken && /^[([/+`-]/.test(nextToken.value);
                         const nextTokenOnSameLine = nextToken && nextToken.loc.start.line === lastTokenOfElseBlock.loc.start.line;
 
-                        /*
-                         * If the else block contents does not end in a semicolon,
-                         * and the else block starts with (, [, /, +, ` or -, then it is not
-                         * safe to remove the else block, because ASI will not add a semicolon
-                         * after the remaining else block contents
-                         */
+                        // If the else block contents does not end in a semicolon,
+                        // and the else block starts with (, [, /, +, ` or -, then it is not
+                        // safe to remove the else block, because ASI will not add a semicolon
+                        // after the remaining else block contents
                         if (nextTokenUnsafe || (nextTokenOnSameLine && nextToken.value !== "}")) {
                             return null;
                         }
@@ -111,11 +101,9 @@ module.exports = {
                         fixedSource = source;
                     }
 
-                    /*
-                     * Extend the replacement range to include the entire
-                     * function to avoid conflicting with no-useless-return.
-                     * https://github.com/eslint/eslint/issues/8026
-                     */
+                    // Extend the replacement range to include the entire
+                    // function to avoid conflicting with no-useless-return.
+                    // https://github.com/eslint/eslint/issues/8026
                     return new FixTracker(fixer, sourceCode)
                         .retainEnclosingFunction(node)
                         .replaceTextRange([elseToken.range[0], node.range[1]], fixedSource);
@@ -217,6 +205,8 @@ module.exports = {
          */
         function checkIfWithoutElse(node) {
             const parent = node.parent;
+            let consequents,
+                alternate;
 
             /*
              * Fixing this would require splitting one statement into two, so no error should
@@ -226,15 +216,12 @@ module.exports = {
                 return;
             }
 
-            const consequents = [];
-            let alternate;
-
-            for (let currentNode = node; currentNode.type === "IfStatement"; currentNode = currentNode.alternate) {
-                if (!currentNode.alternate) {
+            for (consequents = []; node.type === "IfStatement"; node = node.alternate) {
+                if (!node.alternate) {
                     return;
                 }
-                consequents.push(currentNode.consequent);
-                alternate = currentNode.alternate;
+                consequents.push(node.consequent);
+                alternate = node.alternate;
             }
 
             if (consequents.every(alwaysReturns)) {

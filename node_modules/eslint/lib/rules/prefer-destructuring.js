@@ -13,16 +13,13 @@ module.exports = {
         docs: {
             description: "require destructuring from arrays and/or objects",
             category: "ECMAScript 6",
-            recommended: false,
-            url: "https://eslint.org/docs/rules/prefer-destructuring"
+            recommended: false
         },
         schema: [
             {
 
-                /*
-                 * old support {array: Boolean, object: Boolean}
-                 * new support {VariableDeclarator: {}, AssignmentExpression: {}}
-                 */
+                // old support {array: Boolean, object: Boolean}
+                // new support {VariableDeclarator: {}, AssignmentExpression: {}}
                 oneOf: [
                     {
                         type: "object",
@@ -146,7 +143,7 @@ module.exports = {
          * @returns {void}
          */
         function performCheck(leftNode, rightNode, reportNode) {
-            if (rightNode.type !== "MemberExpression" || rightNode.object.type === "Super") {
+            if (rightNode.type !== "MemberExpression") {
                 return;
             }
 
@@ -165,10 +162,8 @@ module.exports = {
             if (shouldCheck(reportNode.type, "object")) {
                 const property = rightNode.property;
 
-                if (
-                    (property.type === "Literal" && leftNode.name === property.value) ||
-                    (property.type === "Identifier" && leftNode.name === property.name && !rightNode.computed)
-                ) {
+                if ((property.type === "Literal" && leftNode.name === property.value) || (property.type === "Identifier" &&
+                    leftNode.name === property.name)) {
                     report(reportNode, "object");
                 }
             }

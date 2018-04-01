@@ -16,8 +16,7 @@ module.exports = {
         docs: {
             description: "disallow multiple spaces in regular expressions",
             category: "Possible Errors",
-            recommended: true,
-            url: "https://eslint.org/docs/rules/no-regex-spaces"
+            recommended: true
         },
 
         schema: [],
@@ -33,7 +32,7 @@ module.exports = {
          * @param {ASTNode} node node to validate
          * @param {string} value regular expression to validate
          * @param {number} valueStart The start location of the regex/string literal. It will always be the case that
-         * `sourceCode.getText().slice(valueStart, valueStart + value.length) === value`
+         `sourceCode.getText().slice(valueStart, valueStart + value.length) === value`
          * @returns {void}
          * @private
          */

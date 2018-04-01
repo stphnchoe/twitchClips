@@ -16,8 +16,7 @@ module.exports = {
         docs: {
             description: "enforce linebreaks after opening and before closing array brackets",
             category: "Stylistic Issues",
-            recommended: false,
-            url: "https://eslint.org/docs/rules/array-bracket-newline"
+            recommended: false
         },
         fixable: "whitespace",
         schema: [
@@ -41,13 +40,7 @@ module.exports = {
                     }
                 ]
             }
-        ],
-        messages: {
-            unexpectedOpeningLinebreak: "There should be no linebreak after '['.",
-            unexpectedClosingLinebreak: "There should be no linebreak before ']'.",
-            missingOpeningLinebreak: "A linebreak is required after '['.",
-            missingClosingLinebreak: "A linebreak is required before ']'."
-        }
+        ]
     },
 
     create(context) {
@@ -103,16 +96,16 @@ module.exports = {
         }
 
         /**
-         * Reports that there shouldn't be a linebreak after the first token
-         * @param {ASTNode} node - The node to report in the event of an error.
-         * @param {Token} token - The token to use for the report.
-         * @returns {void}
-         */
+        * Reports that there shouldn't be a linebreak after the first token
+        * @param {ASTNode} node - The node to report in the event of an error.
+        * @param {Token} token - The token to use for the report.
+        * @returns {void}
+        */
         function reportNoBeginningLinebreak(node, token) {
             context.report({
                 node,
                 loc: token.loc,
-                messageId: "unexpectedOpeningLinebreak",
+                message: "There should be no linebreak after '['.",
                 fix(fixer) {
                     const nextToken = sourceCode.getTokenAfter(token, { includeComments: true });
 
@@ -126,16 +119,16 @@ module.exports = {
         }
 
         /**
-         * Reports that there shouldn't be a linebreak before the last token
-         * @param {ASTNode} node - The node to report in the event of an error.
-         * @param {Token} token - The token to use for the report.
-         * @returns {void}
-         */
+        * Reports that there shouldn't be a linebreak before the last token
+        * @param {ASTNode} node - The node to report in the event of an error.
+        * @param {Token} token - The token to use for the report.
+        * @returns {void}
+        */
         function reportNoEndingLinebreak(node, token) {
             context.report({
                 node,
                 loc: token.loc,
-                messageId: "unexpectedClosingLinebreak",
+                message: "There should be no linebreak before ']'.",
                 fix(fixer) {
                     const previousToken = sourceCode.getTokenBefore(token, { includeComments: true });
 
@@ -149,16 +142,16 @@ module.exports = {
         }
 
         /**
-         * Reports that there should be a linebreak after the first token
-         * @param {ASTNode} node - The node to report in the event of an error.
-         * @param {Token} token - The token to use for the report.
-         * @returns {void}
-         */
+        * Reports that there should be a linebreak after the first token
+        * @param {ASTNode} node - The node to report in the event of an error.
+        * @param {Token} token - The token to use for the report.
+        * @returns {void}
+        */
         function reportRequiredBeginningLinebreak(node, token) {
             context.report({
                 node,
                 loc: token.loc,
-                messageId: "missingOpeningLinebreak",
+                message: "A linebreak is required after '['.",
                 fix(fixer) {
                     return fixer.insertTextAfter(token, "\n");
                 }
@@ -166,16 +159,16 @@ module.exports = {
         }
 
         /**
-         * Reports that there should be a linebreak before the last token
-         * @param {ASTNode} node - The node to report in the event of an error.
-         * @param {Token} token - The token to use for the report.
-         * @returns {void}
-         */
+        * Reports that there should be a linebreak before the last token
+        * @param {ASTNode} node - The node to report in the event of an error.
+        * @param {Token} token - The token to use for the report.
+        * @returns {void}
+        */
         function reportRequiredEndingLinebreak(node, token) {
             context.report({
                 node,
                 loc: token.loc,
-                messageId: "missingClosingLinebreak",
+                message: "A linebreak is required before ']'.",
                 fix(fixer) {
                     return fixer.insertTextBefore(token, "\n");
                 }

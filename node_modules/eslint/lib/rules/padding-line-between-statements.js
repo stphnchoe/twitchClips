@@ -85,10 +85,8 @@ function isBlockLikeStatement(sourceCode, node) {
         return true;
     }
 
-    /*
-     * IIFE is a block-like statement specially from
-     * JSCS#disallowPaddingNewLinesAfterBlocks.
-     */
+    // IIFE is a block-like statement specially from
+    // JSCS#disallowPaddingNewLinesAfterBlocks.
     if (isIIFEStatement(node)) {
         return true;
     }
@@ -358,12 +356,6 @@ const StatementTypes = {
             node.loc.start.line !== node.loc.end.line &&
             isBlockLikeStatement(sourceCode, node)
     },
-    "multiline-expression": {
-        test: (node, sourceCode) =>
-            node.loc.start.line !== node.loc.end.line &&
-            node.type === "ExpressionStatement" &&
-            !isDirectivePrologue(node, sourceCode)
-    },
 
     block: newNodeTypeTester("BlockStatement"),
     empty: newNodeTypeTester("EmptyStatement"),
@@ -400,8 +392,7 @@ module.exports = {
         docs: {
             description: "require or disallow padding lines between statements",
             category: "Stylistic Issues",
-            recommended: false,
-            url: "https://eslint.org/docs/rules/padding-line-between-statements"
+            recommended: false
         },
         fixable: "whitespace",
         schema: {
@@ -473,15 +464,13 @@ module.exports = {
          * @private
          */
         function match(node, type) {
-            let innerStatementNode = node;
-
-            while (innerStatementNode.type === "LabeledStatement") {
-                innerStatementNode = innerStatementNode.body;
+            while (node.type === "LabeledStatement") {
+                node = node.body;
             }
             if (Array.isArray(type)) {
-                return type.some(match.bind(null, innerStatementNode));
+                return type.some(match.bind(null, node));
             }
-            return StatementTypes[type].test(innerStatementNode, sourceCode);
+            return StatementTypes[type].test(node, sourceCode);
         }
 
         /**

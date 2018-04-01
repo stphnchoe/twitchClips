@@ -22,8 +22,7 @@ module.exports = {
         docs: {
             description: "enforce dot notation whenever possible",
             category: "Best Practices",
-            recommended: false,
-            url: "https://eslint.org/docs/rules/dot-notation"
+            recommended: false
         },
 
         schema: [
@@ -41,12 +40,7 @@ module.exports = {
             }
         ],
 
-        fixable: "code",
-
-        messages: {
-            useDot: "[{{key}}] is better written in dot notation.",
-            useBrackets: ".{{key}} is a syntax error."
-        }
+        fixable: "code"
     },
 
     create(context) {
@@ -61,11 +55,11 @@ module.exports = {
         }
 
         /**
-         * Check if the property is valid dot notation
-         * @param {ASTNode} node The dot notation node
-         * @param {string} value Value which is to be checked
-         * @returns {void}
-         */
+        * Check if the property is valid dot notation
+        * @param {ASTNode} node The dot notation node
+        * @param {string} value Value which is to be checked
+        * @returns {void}
+        */
         function checkComputedProperty(node, value) {
             if (
                 validIdentifier.test(value) &&
@@ -76,9 +70,9 @@ module.exports = {
 
                 context.report({
                     node: node.property,
-                    messageId: "useDot",
+                    message: "[{{propertyValue}}] is better written in dot notation.",
                     data: {
-                        key: formattedValue
+                        propertyValue: formattedValue
                     },
                     fix(fixer) {
                         const leftBracket = sourceCode.getTokenAfter(node.object, astUtils.isOpeningBracketToken);
@@ -129,9 +123,9 @@ module.exports = {
                 ) {
                     context.report({
                         node: node.property,
-                        messageId: "useBrackets",
+                        message: ".{{propertyName}} is a syntax error.",
                         data: {
-                            key: node.property.name
+                            propertyName: node.property.name
                         },
                         fix(fixer) {
                             const dot = sourceCode.getTokenBefore(node.property);

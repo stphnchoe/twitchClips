@@ -134,19 +134,14 @@ class CodePath {
      * @returns {void}
      */
     traverseSegments(options, callback) {
-        let resolvedOptions;
-        let resolvedCallback;
-
         if (typeof options === "function") {
-            resolvedCallback = options;
-            resolvedOptions = {};
-        } else {
-            resolvedOptions = options || {};
-            resolvedCallback = callback;
+            callback = options;
+            options = null;
         }
 
-        const startSegment = resolvedOptions.first || this.internal.initialSegment;
-        const lastSegment = resolvedOptions.last;
+        options = options || {};
+        const startSegment = options.first || this.internal.initialSegment;
+        const lastSegment = options.last;
 
         let item = null;
         let index = 0;
@@ -211,7 +206,7 @@ class CodePath {
 
                 // Call the callback when the first time.
                 if (!skippedSegment) {
-                    resolvedCallback.call(this, segment, controller);
+                    callback.call(this, segment, controller);
                     if (segment === lastSegment) {
                         controller.skip();
                     }
