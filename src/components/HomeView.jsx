@@ -14,7 +14,7 @@ const HomeView = props => {
     <Grid container stretched centered>
       <Grid.Column columns={2} computer={10} tablet={16} mobile={16}>
         <Grid.Row computer={16} tablet={16} mobile={16}>
-          <Header id="homeview-title" as="h1" color="white">
+          <Header id="homeview-title" as="h1">
             <Icon name="star" color="yellow" size="large" />
             Top Trending Clip Today
           </Header>

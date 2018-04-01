@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
+import axios from 'axios';
 import NavBar from './components/NavBar';
 import VideoList from './components/VideoList';
 import TimePeriodsBar from './components/TimePeriodsBar';
@@ -11,10 +12,21 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      videos: clips,
-      video: clips[0],
+      videos: [],
+      video: {},
     };
     this.onVideoItemClick = this.onVideoItemClick.bind(this);
+  }
+
+  componentDidMount() {
+    axios.get('/.netlify/functions/handler')
+      .then(response => {
+        this.setState({
+          videos: response.data.clips,
+          video: response.data.clips[0],
+        })
+      })
+      .catch(error => (console.log('ERROR! ', error)));
   }
 
   onVideoItemClick(video) {
