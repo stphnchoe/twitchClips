@@ -1,5 +1,5 @@
 const axios = require('axios');
-const twitchConfig = require('./config/config')['Client-ID'];
+const twitchConfig = process.env.TWITCH_CLIENT_ID || require('./config/config')['Client-ID'];
 
 exports.handler = async (event, ctx, cb) => {
   if (event.httpMethod !== 'GET') {
