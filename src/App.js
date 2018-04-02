@@ -12,7 +12,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeDuration: 'Week',
+      activeDuration: '',
       browseVideos: [],
       homeClip: clips[0],
       video: {},
@@ -27,8 +27,9 @@ class App extends Component {
       .then(response => {
         this.cache = response.data;
         this.setState({
+          activeDuration: 'Week',
           homeClip: response.data[0],
-          browseVideos: response.data.slice(0,100),
+          browseVideos: response.data.slice(100,200),
           video: response.data[0],
         })
       })
