@@ -4,7 +4,7 @@ import ClipViewer from './ClipViewer';
 import moment from 'moment';
 
 const HomeView = props => {
-
+  
   const clickHandler = () => {
     props.onItemClick(props.video);
     props.history.push(`/clip/${props.video.slug}`);

@@ -13,8 +13,9 @@ class App extends Component {
     super(props);
     this.state = {
       activeDuration: 'Week',
-      browseVideos: clips,
-      video: clips[0],
+      browseVideos: [],
+      homeClip: clips[0],
+      video: {},
     };
     this.cache = [];
     this.onDurationClick = this.onDurationClick.bind(this);
@@ -26,6 +27,7 @@ class App extends Component {
       .then(response => {
         this.cache = response.data;
         this.setState({
+          homeClip: response.data[0],
           browseVideos: response.data.slice(0,100),
           video: response.data[0],
         })
@@ -73,7 +75,7 @@ class App extends Component {
         )}/>
         <Route exact path="/" render={props => (
           <div className="app-route-clip-div">
-            <HomeView {...props} video={this.state.video} onItemClick={this.onVideoItemClick} />
+            <HomeView {...props} video={this.state.homeClip} onItemClick={this.onVideoItemClick} />
           </div>
         )}/>
       </div>
