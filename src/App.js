@@ -14,8 +14,9 @@ class App extends Component {
     this.state = {
       activeDuration: 'Week',
       browseVideos: [],
-      homeClip: clips[0],
-      video: {},
+      homeClip: null,
+      monthClips: [],
+      video: null,
     };
     this.cache = [];
     this.onDurationClick = this.onDurationClick.bind(this);
@@ -30,6 +31,7 @@ class App extends Component {
           activeDuration: 'Week',
           homeClip: response.data[0],
           browseVideos: response.data.slice(100,200),
+          monthClips: response.data.slice(200,300),
           video: response.data[0],
         })
       })
@@ -49,7 +51,7 @@ class App extends Component {
     } else if (duration === 'Week') {
       durationVideos = this.cache.slice(100,200);
     } else if (duration === 'Month') {
-      durationVideos = this.cache.slice(200,300);
+      durationVideos = this.state.monthClips;
     } else if (duration === 'All Time') {
       durationVideos = this.cache.slice(300,400);
     }
@@ -64,19 +66,19 @@ class App extends Component {
       <div id="primary-background-image">
         <NavBar />
         <Route path="/browse" render={props => (
-          <div id="secondary-background-image">
+          <div>
             <DurationsBar onDurationClick={this.onDurationClick} activeDuration={this.state.activeDuration} />
             <VideoList {...props} browseVideos={this.state.browseVideos} onItemClick={this.onVideoItemClick} />
           </div>
         )}/>
         <Route path="/clip" render={props => (
           <div className="app-route-clip-div" id="tertiary-background-image">
-            <ClipsView video={this.state.video} />
+            <ClipsView {...props} video={this.state.video} />
           </div>
         )}/>
         <Route exact path="/" render={props => (
           <div className="app-route-clip-div">
-            <HomeView {...props} video={this.state.homeClip} onItemClick={this.onVideoItemClick} />
+            <HomeView {...props} video={this.state.homeClip} onItemClick={this.onVideoItemClick} monthClips={this.state.monthClips.slice(0,5)} />
           </div>
         )}/>
       </div>

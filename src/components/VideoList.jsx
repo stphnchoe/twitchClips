@@ -5,7 +5,7 @@ import VideoListItem from './VideoListItem';
 const VideoList = props => (
   <div>
     <span className='videolist-clips-title'>
-      Popular Twitch Clips
+      Popular
     </span>
     <Grid centered columns={6}>
       {props.browseVideos.map((video) => {

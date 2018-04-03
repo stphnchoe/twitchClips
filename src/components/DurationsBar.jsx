@@ -13,7 +13,6 @@ class DurationsBar extends Component {
   handleItemClick(e, { name }) {
     if ( name !== this.state.activeDuration) {
       this.props.onDurationClick(name);
-      this.setState({ activeDuration: name });
     }
   }
 
