@@ -4,8 +4,7 @@ import ClipViewer from './ClipViewer';
 import CommentsList from './CommentsList';
 import moment from 'moment';
 
-const ClipsView = ({ video }) => {
-  
+const ClipsView = ({ video, videoComments, addComment }) => {
   if (video) {
     return (
       <Grid padded>
@@ -51,7 +50,7 @@ const ClipsView = ({ video }) => {
         <Grid.Row columns={3}>
           <Grid.Column width={5}/>
           <Grid.Column>
-            <CommentsList />
+            <CommentsList videoComments={videoComments} addComment={addComment} />
           </Grid.Column>
         </Grid.Row>
       </Grid>
