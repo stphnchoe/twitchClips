@@ -11,13 +11,7 @@ const HomeView = props => {
     props.history.push(`/clip/${props.video.slug}`);
   }
 
-  if (props.video === null) {
-    return (
-      <Grid>
-        <Image src="https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-637819.jpg" />
-      </Grid>
-    );
-  } else {
+  if (props.video) {
     return (
       <Grid container stretched centered>
         <Grid.Row columns={2} computer={9} tablet={16} mobile={16}>
@@ -62,14 +56,19 @@ const HomeView = props => {
         <Grid.Row>
           <TopClipsList {...props} videos={props.monthClips} onItemClick={props.onItemClick} />
         </Grid.Row>
-        <Grid.Row>
-        </Grid.Row>
+        <Grid.Row />
         <Grid.Row id="homeview-title" only="computer">
           Greatest of all time
         </Grid.Row>
         <Grid.Row>
           <TopClipsList {...props} videos={props.bestClips} onItemClick={props.onItemClick} />
         </Grid.Row>
+      </Grid>
+    );
+  } else {
+    return (
+      <Grid>
+        <Image src="https://wallpapers.wallhaven.cc/wallpapers/full/wallhaven-637819.jpg" />
       </Grid>
     );
   }

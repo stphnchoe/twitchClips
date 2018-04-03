@@ -12,7 +12,7 @@ const TopClipListItem = (props) => {
     <Grid onClick={clickHandler}>
       <Grid.Column>
         <Image src={props.video.thumbnails.small} label={{ color: 'yellow', content: `Top ${props.count}`, icon: 'star', ribbon: true }} />
-        <Header as="h3" content={props.video.title} inverted />
+        <Header as="h3" content={props.video.title} id="homeview-video-title" inverted />
       </Grid.Column>
     </Grid>
   );
