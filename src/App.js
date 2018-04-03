@@ -16,6 +16,7 @@ class App extends Component {
       browseVideos: [],
       homeClip: null,
       monthClips: [],
+      bestClips: [],
       video: null,
     };
     this.cache = [];
@@ -32,6 +33,7 @@ class App extends Component {
           homeClip: response.data[0],
           browseVideos: response.data.slice(100,200),
           monthClips: response.data.slice(200,300),
+          bestClips: response.data.slice(300,400),
           video: response.data[0],
         })
       })
@@ -53,7 +55,7 @@ class App extends Component {
     } else if (duration === 'Month') {
       durationVideos = this.state.monthClips;
     } else if (duration === 'All Time') {
-      durationVideos = this.cache.slice(300,400);
+      durationVideos = this.state.bestClips;
     }
     this.setState({
       activeDuration: duration,
@@ -78,7 +80,7 @@ class App extends Component {
         )}/>
         <Route exact path="/" render={props => (
           <div className="app-route-clip-div">
-            <HomeView {...props} video={this.state.homeClip} onItemClick={this.onVideoItemClick} monthClips={this.state.monthClips.slice(0,5)} />
+            <HomeView {...props} video={this.state.homeClip} onItemClick={this.onVideoItemClick} monthClips={this.state.monthClips.slice(0,5)} bestClips={this.state.bestClips.slice(0,5)} />
           </div>
         )}/>
       </div>

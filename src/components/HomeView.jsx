@@ -64,6 +64,12 @@ const HomeView = props => {
         </Grid.Row>
         <Grid.Row>
         </Grid.Row>
+        <Grid.Row id="homeview-title" only="computer">
+          Greatest of all time
+        </Grid.Row>
+        <Grid.Row>
+          <TopClipsList {...props} videos={props.bestClips} onItemClick={props.onItemClick} />
+        </Grid.Row>
       </Grid>
     );
   }
