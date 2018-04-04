@@ -1,0 +1,116 @@
+.app-route-clip-div {
+  margin-top: 20px;
+}
+
+.clipview-title {
+  border-radius: 5px;
+  color: white;
+  font-size: 2.46em;
+  font-family: 'Oswald';
+  text-align: center;
+}
+
+.clipview-details-row {
+  font-size: 1.6em;
+}
+
+#navbar-menu {
+  background: #6441a4;
+  border-radius: 0px;
+}
+
+.navbar-clips-header {
+  display: flex;
+  color: white;
+  font-family: 'Bangers';
+  font-size: 3em;
+  align-items: center;
+}
+
+
+.float-right {
+  float: right;
+}
+
+#text-align-center {
+  text-align: center;
+}
+
+.card-description-username {
+  display: flex;
+  align-items: stretch;
+}
+
+.videolist-clips-title {
+  display: flex;
+  align-items: center;
+  height: 1.8em;
+  font-family: 'Bangers';
+  font-size: 4em;
+  color: white;
+  padding-left: 50px;
+}
+
+.videoWrapper {
+  position: relative;
+	padding-bottom: 56.25%; /* 16:9 */
+	padding-top: 25px;
+	height: 0;
+}
+
+.videoWrapper iframe {
+  position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+#primary-background-image {
+  background: linear-gradient(to bottom right, black, #6441a4);
+}
+
+#tertiary-background-image {
+  background: linear-gradient(to bottom, black, #6441a4);
+}
+
+#cliplistitem-padding {
+  padding: 0px;
+}
+
+.white-font {
+  color: white;
+}
+#white-font {
+  color: white;
+}
+
+.grey-font {
+  color: grey;
+}
+
+.change-font {
+  font-family: 'Oswald';
+  color:white
+}
+
+#homeview-video-title {
+  color: white;
+  font-size: 2em;
+  font-family: 'Oswald';
+}
+
+#homeview-description {
+  color: white;
+  font-family: 'Bangers';
+  font-size: 5em;
+  padding-top: 45px;
+}
+
+#homeview-title {
+  color: white;
+  font-family: 'Bangers';
+  font-size: 5em;
+  padding-top: 100px;
+  padding-bottom: 100px;
+}

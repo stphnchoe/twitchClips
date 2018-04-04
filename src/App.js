@@ -60,7 +60,6 @@ class App extends Component {
     } else if (activeDuration === 'All Time') {
       durationVideos = this.state.bestClips;
     }
-    console.log(activeDuration);
     this.setState({
       browseVideos: durationVideos,
       activeDuration,

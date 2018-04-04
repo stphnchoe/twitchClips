@@ -7,6 +7,8 @@
     "eslint": "^4.19.1",
     "moment": "^2.21.0",
     "netlify-lambda": "^0.3.0",
+    "pg": "^7.4.1",
+    "pg-native": "^2.2.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-router-dom": "^4.2.2",

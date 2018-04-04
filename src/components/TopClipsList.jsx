@@ -8,7 +8,7 @@ const TopClipsList = props => (
   <Grid celled>
     <Grid.Row columns={5}>
       {props.videos.map(video => (
-        <Grid.Column color="white" id="cliplistitem-padding">
+        <Grid.Column id="cliplistitem-padding">
           <TopClipListItem {...props} video={video} count={count++ % 5 + 1} onItemClick={props.onItemClick} />
         </Grid.Column>
       ))}

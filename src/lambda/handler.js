@@ -1,4 +1,5 @@
 const axios = require('axios');
+const db = require('../../database/index');
 const twitchConfig = process.env.TWITCH_CLIENT_ID || require('./config/config')['Client-ID'];
 
 exports.handler = async (event, ctx, cb) => {
