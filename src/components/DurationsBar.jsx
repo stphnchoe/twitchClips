@@ -1,37 +1,25 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Menu } from 'semantic-ui-react'
 
-class DurationsBar extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      activeDuration: this.props.activeDuration,
-    };
-    this.handleItemClick = this.handleItemClick.bind(this);
-  }
+const DurationsBar = (props) => {
 
-  handleItemClick(e, { name }) {
-    if ( name !== this.state.activeDuration) {
-      this.props.onDurationClick(name);
-    }
-  }
+  const handleItemClick = (e, { name }) => {
+    props.onDurationClick(name);
+  };
 
-  render() {
-    const { activeDuration } = this.state
+  return (
+    <div>
+      <Menu pointing secondary color="purple">
+        <Menu.Menu position="right">
+          <Menu.Item id="white-font" name="Day" active={props.activeDuration === 'Day'} onClick={handleItemClick} />
+          <Menu.Item id="white-font" name="Week" active={props.activeDuration === 'Week'} onClick={handleItemClick} />
+          <Menu.Item id="white-font" name="Month" active={props.activeDuration === 'Month'} onClick={handleItemClick} />
+          <Menu.Item id="white-font" name="All Time" active={props.activeDuration === 'All Time'} onClick={handleItemClick} />
+        </Menu.Menu>
+      </Menu>
+    </div>
+  );
+};
 
-    return (
-      <div>
-        <Menu pointing secondary color="purple">
-          <Menu.Menu position="right">
-            <Menu.Item id="white-font" name="Day" active={activeDuration === 'Day'} onClick={this.handleItemClick} />
-            <Menu.Item id="white-font" name="Week" active={activeDuration === 'Week'} onClick={this.handleItemClick} />
-            <Menu.Item id="white-font" name="Month" active={activeDuration === 'Month'} onClick={this.handleItemClick} />
-            <Menu.Item id="white-font" name="All Time" active={activeDuration === 'All Time'} onClick={this.handleItemClick} />
-          </Menu.Menu>
-        </Menu>
-      </div>
-    )
-  }
-}
 
 export default DurationsBar;

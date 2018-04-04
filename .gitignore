@@ -2,3 +2,4 @@ config.js
 .env
 exampleData.js
 exampleComments.js
+/node_modules

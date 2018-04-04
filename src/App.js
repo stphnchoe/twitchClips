@@ -13,7 +13,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeDuration: 'Week',
+      activeDuration: '',
       browseVideos: [],
       homeClip: null,
       monthClips: [],
@@ -49,20 +49,21 @@ class App extends Component {
     });
   }
 
-  onDurationClick(duration) {
+  onDurationClick(activeDuration) {
     let durationVideos = [];
-    if (duration === 'Day') {
+    if (activeDuration === 'Day') {
       durationVideos = this.cache.slice(0,100);
-    } else if (duration === 'Week') {
+    } else if (activeDuration === 'Week') {
       durationVideos = this.cache.slice(100,200);
-    } else if (duration === 'Month') {
+    } else if (activeDuration === 'Month') {
       durationVideos = this.state.monthClips;
-    } else if (duration === 'All Time') {
+    } else if (activeDuration === 'All Time') {
       durationVideos = this.state.bestClips;
     }
+    console.log(activeDuration);
     this.setState({
-      activeDuration: duration,
-      browseVideos: durationVideos, 
+      browseVideos: durationVideos,
+      activeDuration,
     });
   }
 
@@ -71,7 +72,7 @@ class App extends Component {
       username: 'Anonymous',
       avatar_img: 'https://flymark.com.ua/Content/no-photo.jpg',
       created_at: Date.now(),
-      'video_slug': this.state.video.slug,
+      video_slug: this.state.video.slug,
       text: comment,
     }
     this.setState({
