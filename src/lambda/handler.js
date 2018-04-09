@@ -49,6 +49,7 @@ exports.handler = async (event, ctx, cb) => {
       });
 
       const data = data0.data.clips.concat(data1.data.clips.concat(data2.data.clips.concat(data3.data.clips)));
+      data.forEach(item => db.insertClip(item));
       cb(null, { statusCode: 200, body: JSON.stringify(data) });
     } catch (error) {
       console.error(error);
